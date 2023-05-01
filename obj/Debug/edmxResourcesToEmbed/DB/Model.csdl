@@ -1,0 +1,166 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DBModel1" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Departmebt">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="students" Relationship="Self.FK_students_ToTable" FromRole="Departmebts" ToRole="students" />
+  </EntityType>
+  <EntityType Name="Exam">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Subjectld" Type="Int32" />
+    <Property Name="Date" Type="DateTime" Precision="0" />
+    <Property Name="Term" Type="Int16" />
+    <NavigationProperty Name="subject" Relationship="Self.FK_Exams_ToTable" FromRole="Exams" ToRole="subjects" />
+    <NavigationProperty Name="StudentMarks" Relationship="Self.FK_StudentMarks_ToTable" FromRole="Exams" ToRole="StudentMarks" />
+  </EntityType>
+  <EntityType Name="StudentMark">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="StudentId" Type="Int32" />
+    <Property Name="ExamId" Type="Int32" />
+    <Property Name="Mark" Type="Int32" />
+    <NavigationProperty Name="Exam" Relationship="Self.FK_StudentMarks_ToTable" FromRole="StudentMarks" ToRole="Exams" />
+    <NavigationProperty Name="student" Relationship="Self.FK_StudentMarks_ToTable_1" FromRole="StudentMarks" ToRole="students" />
+  </EntityType>
+  <EntityType Name="student">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="RegisterDate" Type="Int32" />
+    <Property Name="Departmentld" Type="Int32" />
+    <NavigationProperty Name="Departmebt" Relationship="Self.FK_students_ToTable" FromRole="students" ToRole="Departmebts" />
+    <NavigationProperty Name="StudentMarks" Relationship="Self.FK_StudentMarks_ToTable_1" FromRole="students" ToRole="StudentMarks" />
+  </EntityType>
+  <EntityType Name="SubjectLecture">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Lectureld" Type="Int32" />
+    <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="subject" Relationship="Self.FK_SubjectLectures_ToTable" FromRole="SubjectLectures" ToRole="subjects" />
+  </EntityType>
+  <EntityType Name="subject">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Depatmentld" Type="Int64" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="MlnimumDegree" Type="Int32" />
+    <Property Name="Term" Type="Int16" />
+    <Property Name="Year" Type="Int16" />
+    <NavigationProperty Name="Exams" Relationship="Self.FK_Exams_ToTable" FromRole="subjects" ToRole="Exams" />
+    <NavigationProperty Name="SubjectLectures" Relationship="Self.FK_SubjectLectures_ToTable" FromRole="subjects" ToRole="SubjectLectures" />
+  </EntityType>
+  <EntityType Name="Table">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_students_ToTable">
+    <End Role="Departmebts" Type="Self.Departmebt" Multiplicity="0..1" />
+    <End Role="students" Type="Self.student" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Departmebts">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="students">
+        <PropertyRef Name="Departmentld" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Exams_ToTable">
+    <End Role="subjects" Type="Self.subject" Multiplicity="0..1" />
+    <End Role="Exams" Type="Self.Exam" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="subjects">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Exams">
+        <PropertyRef Name="Subjectld" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_StudentMarks_ToTable">
+    <End Role="Exams" Type="Self.Exam" Multiplicity="0..1" />
+    <End Role="StudentMarks" Type="Self.StudentMark" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Exams">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="StudentMarks">
+        <PropertyRef Name="ExamId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_StudentMarks_ToTable_1">
+    <End Role="students" Type="Self.student" Multiplicity="0..1" />
+    <End Role="StudentMarks" Type="Self.StudentMark" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="students">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="StudentMarks">
+        <PropertyRef Name="StudentId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SubjectLectures_ToTable">
+    <End Role="subjects" Type="Self.subject" Multiplicity="0..1" />
+    <End Role="SubjectLectures" Type="Self.SubjectLecture" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="subjects">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="SubjectLectures">
+        <PropertyRef Name="Lectureld" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DBEntities3" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Departmebts" EntityType="Self.Departmebt" />
+    <EntitySet Name="Exams" EntityType="Self.Exam" />
+    <EntitySet Name="StudentMarks" EntityType="Self.StudentMark" />
+    <EntitySet Name="students" EntityType="Self.student" />
+    <EntitySet Name="SubjectLectures" EntityType="Self.SubjectLecture" />
+    <EntitySet Name="subjects" EntityType="Self.subject" />
+    <EntitySet Name="Tables" EntityType="Self.Table" />
+    <AssociationSet Name="FK_students_ToTable" Association="Self.FK_students_ToTable">
+      <End Role="Departmebts" EntitySet="Departmebts" />
+      <End Role="students" EntitySet="students" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Exams_ToTable" Association="Self.FK_Exams_ToTable">
+      <End Role="subjects" EntitySet="subjects" />
+      <End Role="Exams" EntitySet="Exams" />
+    </AssociationSet>
+    <AssociationSet Name="FK_StudentMarks_ToTable" Association="Self.FK_StudentMarks_ToTable">
+      <End Role="Exams" EntitySet="Exams" />
+      <End Role="StudentMarks" EntitySet="StudentMarks" />
+    </AssociationSet>
+    <AssociationSet Name="FK_StudentMarks_ToTable_1" Association="Self.FK_StudentMarks_ToTable_1">
+      <End Role="students" EntitySet="students" />
+      <End Role="StudentMarks" EntitySet="StudentMarks" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SubjectLectures_ToTable" Association="Self.FK_SubjectLectures_ToTable">
+      <End Role="subjects" EntitySet="subjects" />
+      <End Role="SubjectLectures" EntitySet="SubjectLectures" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

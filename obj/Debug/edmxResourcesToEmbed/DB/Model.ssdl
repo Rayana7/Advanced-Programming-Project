@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DBModel1.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Departmebts">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Exams">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="Subjectld" Type="int" />
+    <Property Name="Date" Type="date" />
+    <Property Name="Term" Type="smallint" />
+  </EntityType>
+  <EntityType Name="StudentMarks">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="StudentId" Type="int" />
+    <Property Name="ExamId" Type="int" />
+    <Property Name="Mark" Type="int" />
+  </EntityType>
+  <EntityType Name="students">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="Username" Type="varchar" MaxLength="50" />
+    <Property Name="FirstName" Type="varchar" MaxLength="50" />
+    <Property Name="LastName" Type="varchar" MaxLength="50" />
+    <Property Name="Email" Type="varchar" MaxLength="50" />
+    <Property Name="Phone" Type="varchar" MaxLength="50" />
+    <Property Name="RegisterDate" Type="int" />
+    <Property Name="Departmentld" Type="int" />
+  </EntityType>
+  <EntityType Name="SubjectLectures">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="Lectureld" Type="int" />
+    <Property Name="Title" Type="varchar" MaxLength="50" />
+    <Property Name="Content" Type="text" />
+  </EntityType>
+  <EntityType Name="subjects">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="Depatmentld" Type="bigint" />
+    <Property Name="Name" Type="varchar" MaxLength="50" />
+    <Property Name="MlnimumDegree" Type="int" />
+    <Property Name="Term" Type="smallint" />
+    <Property Name="Year" Type="smallint" />
+  </EntityType>
+  <EntityType Name="Table">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Exams_ToTable">
+    <End Role="subjects" Type="Self.subjects" Multiplicity="0..1" />
+    <End Role="Exams" Type="Self.Exams" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="subjects">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Exams">
+        <PropertyRef Name="Subjectld" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_StudentMarks_ToTable">
+    <End Role="Exams" Type="Self.Exams" Multiplicity="0..1" />
+    <End Role="StudentMarks" Type="Self.StudentMarks" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Exams">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="StudentMarks">
+        <PropertyRef Name="ExamId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_StudentMarks_ToTable_1">
+    <End Role="students" Type="Self.students" Multiplicity="0..1" />
+    <End Role="StudentMarks" Type="Self.StudentMarks" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="students">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="StudentMarks">
+        <PropertyRef Name="StudentId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_students_ToTable">
+    <End Role="Departmebts" Type="Self.Departmebts" Multiplicity="0..1" />
+    <End Role="students" Type="Self.students" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Departmebts">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="students">
+        <PropertyRef Name="Departmentld" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SubjectLectures_ToTable">
+    <End Role="subjects" Type="Self.subjects" Multiplicity="0..1" />
+    <End Role="SubjectLectures" Type="Self.SubjectLectures" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="subjects">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="SubjectLectures">
+        <PropertyRef Name="Lectureld" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DBModel1StoreContainer">
+    <EntitySet Name="Departmebts" EntityType="Self.Departmebts" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Exams" EntityType="Self.Exams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="StudentMarks" EntityType="Self.StudentMarks" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="students" EntityType="Self.students" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SubjectLectures" EntityType="Self.SubjectLectures" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="subjects" EntityType="Self.subjects" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Table" EntityType="Self.Table" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Exams_ToTable" Association="Self.FK_Exams_ToTable">
+      <End Role="subjects" EntitySet="subjects" />
+      <End Role="Exams" EntitySet="Exams" />
+    </AssociationSet>
+    <AssociationSet Name="FK_StudentMarks_ToTable" Association="Self.FK_StudentMarks_ToTable">
+      <End Role="Exams" EntitySet="Exams" />
+      <End Role="StudentMarks" EntitySet="StudentMarks" />
+    </AssociationSet>
+    <AssociationSet Name="FK_StudentMarks_ToTable_1" Association="Self.FK_StudentMarks_ToTable_1">
+      <End Role="students" EntitySet="students" />
+      <End Role="StudentMarks" EntitySet="StudentMarks" />
+    </AssociationSet>
+    <AssociationSet Name="FK_students_ToTable" Association="Self.FK_students_ToTable">
+      <End Role="Departmebts" EntitySet="Departmebts" />
+      <End Role="students" EntitySet="students" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SubjectLectures_ToTable" Association="Self.FK_SubjectLectures_ToTable">
+      <End Role="subjects" EntitySet="subjects" />
+      <End Role="SubjectLectures" EntitySet="SubjectLectures" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
